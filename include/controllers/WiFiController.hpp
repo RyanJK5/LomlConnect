@@ -16,7 +16,7 @@ namespace Loml {
         const char* Username        = nullptr;
         const char* Password        = nullptr;
     
-        auto IsEnterprise() const -> bool { return Username != nullptr; }
+        [[nodiscard]] auto IsEnterprise() const -> bool { return Username != nullptr; }
     };
 
     struct ServerSettings {

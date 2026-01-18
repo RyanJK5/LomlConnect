@@ -14,8 +14,8 @@ namespace Loml {
     protected:
         virtual void Display(LEDStrip& led) = 0;
     protected:
-        static void FadeAll(LEDStrip& led);
-        static void LightAll(LEDStrip& led);
+        static void DimAll(LEDStrip& led);
+        static void BrightenAll(LEDStrip& led);
     private:
         uint64_t mTickDelayMs;
         uint64_t mLastTimeMs = 0;

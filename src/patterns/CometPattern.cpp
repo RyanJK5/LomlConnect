@@ -10,7 +10,7 @@ namespace Loml {
             led.SetPixelColor(mStripPos, RgbColor(0, 0, 30));
             mStripPos = (mStripPos + 1) % led.PixelCount();
         }
-        FadeAll(led);
+        DimAll(led);
         
         mLightNewPixel = !mLightNewPixel;
         led.Show();
