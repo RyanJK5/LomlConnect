@@ -3,22 +3,23 @@
 #include "patterns/TestPattern.hpp"
 
 namespace Loml {
-	TestPattern::TestPattern() 
-		: LEDPattern(500)
-	{ }
-	
-	void TestPattern::Display(LEDStrip& led) {
+	void TestPattern::DisplayImpl(LEDStrip& led) {
 		constexpr static uint8_t full = 10;
-		constexpr static uint8_t zero = 0;
 
-		RgbColor color{
-			mColorIndex == 0 ? full : zero,
-			mColorIndex == 1 ? full : zero,
-			mColorIndex == 2 ? full : zero
-		};
-		mColorIndex = (mColorIndex + 1) % 3;
-	
-		led.ClearTo(color);
+		led.ClearTo(RgbColor{full, 0, 0});
 		led.Show();
+		if (!Delay(500)) {
+			return;
+		}
+		led.ClearTo(RgbColor{0, full, 0});
+		led.Show();
+		if (!Delay(500)) {
+			return;
+		}
+		led.ClearTo(RgbColor{0, 0, full});
+		led.Show();
+		if (!Delay(500)) {
+			return;
+		}
 	}
 }

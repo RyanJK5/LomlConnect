@@ -1,18 +1,22 @@
+#include "patterns/Colors.hpp"
 #include "patterns/CometPattern.hpp"
 
 namespace Loml {
-    CometPattern::CometPattern()
-        : LEDPattern(10)
-    { }
-    
-    void CometPattern::Display(LEDStrip& led) {
-        if (mLightNewPixel) {
-            led.SetPixelColor(mStripPos, RgbColor(0, 0, 30));
-            mStripPos = (mStripPos + 1) % led.PixelCount();
-        }
-        DimAll(led);
+    void CometPattern::DisplayImpl(LEDStrip& led) {
+        constexpr static auto maxLength = *std::max_element(RingLengths.begin(), RingLengths.end());
         
-        mLightNewPixel = !mLightNewPixel;
-        led.Show();
+        for (auto i = 0; i < maxLength; i++) {
+            for (auto j = 0; j < RingLengths.size(); j++) {
+                led.SetPixelColor(RingStartPositions[j] + (i % RingLengths[j]), mRingColors.at(j).Dim(20));
+            }
+            DimAll(led);
+            if (!Delay(50)) {
+                return;
+            }
+            DimAll(led);
+            if (!Delay(50)) {
+                return;
+            }
+        }
     }
 }

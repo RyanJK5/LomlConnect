@@ -6,13 +6,16 @@
 namespace Loml {
     class CometPattern : public LEDPattern {
     public:
-        CometPattern();
+        constexpr CometPattern(const std::array<RgbColor, 6>& ringColors);
     protected:
-        virtual void Display(LEDStrip& led) override final;        
+        virtual void DisplayImpl(LEDStrip& led) override final;
     private:
-        bool     mLightNewPixel  = true;
-        uint16_t mStripPos = 0;
+        std::array<RgbColor, 6> mRingColors;
     };
+
+    constexpr CometPattern::CometPattern(const std::array<RgbColor, 6>& ringColors) 
+        : mRingColors(ringColors)
+    { }
 }
 
 #endif

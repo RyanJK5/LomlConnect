@@ -6,11 +6,9 @@
 namespace Loml {
     class TestPattern : public LEDPattern {
     public:
-        TestPattern();
-    protected:
-        virtual void Display(LEDStrip& led) override final;
-    private:
-        int32_t mColorIndex = 0;
+        TestPattern() = default;
+     
+        virtual void DisplayImpl(LEDStrip& led) override final;
     };
 }
 

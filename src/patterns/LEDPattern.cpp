@@ -1,16 +1,19 @@
 #include "patterns/LEDPattern.hpp"
 
 namespace Loml {
-    LEDPattern::LEDPattern(uint64_t tickDelayMs)
-        : mTickDelayMs(tickDelayMs)
-    { }
-    
-    void LEDPattern::Update(LEDStrip& led) {
-        if (millis() - mLastTimeMs < mTickDelayMs) {
-            return;
-        }
-        mLastTimeMs = millis();
-        Display(led);
+    void LEDPattern::Interrupt() {
+        Serial.println("Interrupted");
+        mInterrupted = true;
+    }
+
+    void LEDPattern::Display(LEDStrip& led) {
+        DisplayImpl(led);
+        mInterrupted = false;
+    }
+
+    [[nodiscard]] auto LEDPattern::Delay(int64_t delayMs) -> bool {
+        vTaskDelay(pdMS_TO_TICKS(delayMs));
+        return !mInterrupted;
     }
     
     void LEDPattern::DimAll(LEDStrip& led) {
@@ -26,5 +29,6 @@ namespace Loml {
             auto color = led.GetPixelColor(i);
             led.SetPixelColor(i, color.Brighten(255 - 1));
         }
+        led.Show();
     }
 }

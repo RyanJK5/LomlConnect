@@ -3,9 +3,5 @@
 #include "patterns/LomlPattern.hpp"
 
 namespace Loml {
-	LomlPattern::LomlPattern() 
-		: LEDPattern(100)
-	{ }
-	
-	void LomlPattern::Display(LEDStrip& led) { }
+	void LomlPattern::DisplayImpl(LEDStrip& led) { }
 }

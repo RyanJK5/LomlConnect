@@ -6,8 +6,8 @@
 
 namespace Loml {
 	WiFiController::WiFiController(const WiFiSettings& settings) 
-		: Controller(settings)
-		, mServerSettings(settings.Server)
+		: Controller{settings}
+		, mServerSettings{settings.Server}
 	{
 		Serial.println("Connecting...");
 		

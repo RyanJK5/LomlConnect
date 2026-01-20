@@ -3,8 +3,8 @@
 #include "controllers/ButtonController.hpp"
 
 Loml::ButtonController::ButtonController(const ButtonSettings& settings) 
-    : Controller(settings)
-    , mSettings(settings)
+    : Controller{settings}
+    , mSettings{settings}
 {
 	pinMode(settings.PinNumber, INPUT_PULLUP);
 }

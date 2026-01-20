@@ -6,9 +6,9 @@
 namespace Loml {
     class HeartPattern : public LEDPattern {
     public:
-        HeartPattern();
+        HeartPattern() = default;
     protected:
-        virtual void Display(LEDStrip& led) override final;        
+        virtual void DisplayImpl(LEDStrip& led) override final;        
     private:
         uint16_t mStripPos = 0;
     };
