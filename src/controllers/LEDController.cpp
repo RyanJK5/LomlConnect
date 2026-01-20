@@ -6,6 +6,7 @@
 #include "patterns/CrazyPattern.hpp"
 #include "patterns/CometPattern.hpp"
 #include "patterns/BeatPattern.hpp"
+#include "patterns/BlankPattern.hpp"
 
 namespace Loml {
     LEDController::LEDController(const LEDSettings& settings) 
@@ -29,6 +30,7 @@ namespace Loml {
             Colors::Teal,
             Colors::SeaGreen
         }));
+        mPatterns.emplace_back(std::make_unique<BlankPattern>());
         mStrip.Begin();
     }
     
@@ -42,6 +44,7 @@ namespace Loml {
     void LEDController::OnMessage(const WiFiResult& args) { }
     
     void LEDController::UpdateImpl() {
+        mStrip.ClearTo(Colors::Black);
         mPatterns.at(mCurrentIndex)->Display(mStrip);
     }
 }

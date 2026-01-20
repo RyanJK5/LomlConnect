@@ -36,7 +36,7 @@ namespace Loml {
     private:
         void UpdateImpl();
     private:
-        NeoPixelBus<NeoGrbFeature, Neo800KbpsMethod> mStrip;
+        LEDStrip mStrip;
         
         std::vector<std::unique_ptr<LEDPattern>> mPatterns;
         size_t mCurrentIndex = 0;
