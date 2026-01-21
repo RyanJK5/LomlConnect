@@ -10,6 +10,7 @@ namespace Loml {
     protected:
         virtual void DisplayImpl(LEDStrip& led) override final {
             vTaskDelay(5);
+            led.Show();
         }
     };
 }
