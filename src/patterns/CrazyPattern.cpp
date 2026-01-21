@@ -4,15 +4,17 @@
 namespace Loml {
     void CrazyPattern::DisplayImpl(LEDStrip& led) {
         constexpr static auto colorWheel = [](uint8_t pos) {
-            pos = 255 - pos;
+            constexpr static auto max = 255;
+            pos = max - pos;
+
             if (pos < 85) {
-                return RgbColor{255 - pos * 3, 0, pos * 3};
+                return RgbColor{max - pos * 3, 0, pos * 3};
             } else if (pos < 170) {
                 pos -= 85;
-                return RgbColor{0, pos * 3, 255 - pos * 3};
+                return RgbColor{0, pos * 3, max - pos * 3};
             } else {
                 pos -= 170;
-                return RgbColor{pos * 3, 255 - pos * 3, 0};
+                return RgbColor{pos * 3, max - pos * 3, 0};
             }
         };
         

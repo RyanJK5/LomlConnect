@@ -24,6 +24,15 @@ namespace Loml {
         return ret;
     }();
 
+    template <int ColorCount>
+    constexpr auto Dimmed(const std::array<RgbColor, ColorCount>& colors, uint8_t dim) {
+        std::array<RgbColor, ColorCount> ret{};
+        for (auto i = 0; i < colors.size(); i++) {
+            ret.at(i) = colors.at(i).Dim(dim);
+        }
+        return ret;
+    }
+
     class LEDPattern {
     public:
         constexpr LEDPattern() = default;

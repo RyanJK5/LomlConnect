@@ -5,7 +5,7 @@
 
 namespace Loml {
     class BlankPattern : public LEDPattern {
-    public:
+    public: 
         constexpr BlankPattern() = default;
     protected:
         virtual void DisplayImpl(LEDStrip& led) override final {

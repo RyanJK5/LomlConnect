@@ -7,11 +7,21 @@
 #include "patterns/CometPattern.hpp"
 #include "patterns/BeatPattern.hpp"
 #include "patterns/BlankPattern.hpp"
+#include "patterns/RadiatePattern.hpp"
 
 namespace Loml {
     LEDController::LEDController(const LEDSettings& settings) 
         : Controller{settings}
         , mStrip{settings.LightCount, settings.PinNumber} {
+        // mPatterns.emplace_back(std::make_unique<BlankPattern>());
+        mPatterns.emplace_back(std::make_unique<RadiatePattern<6>>(std::array{
+            Colors::HotPink,
+            Colors::Magenta,
+            Colors::BlueViolet,
+            Colors::RoyalBlue,
+            Colors::Cyan,
+            Colors::Teal
+        }));
         mPatterns.emplace_back(std::make_unique<CrazyPattern>());
         mPatterns.emplace_back(std::make_unique<CometPattern>(std::array{
             Colors::HotPink,
@@ -19,7 +29,7 @@ namespace Loml {
             Colors::BlueViolet,
             Colors::RoyalBlue,
             Colors::Cyan,
-            Colors::Teal,
+            Colors::Teal
         }));
         mPatterns.emplace_back(std::make_unique<BeatPattern<7>>(std::array{
             Colors::HotPink,
@@ -30,7 +40,6 @@ namespace Loml {
             Colors::Teal,
             Colors::SeaGreen
         }));
-        mPatterns.emplace_back(std::make_unique<BlankPattern>());
         mStrip.Begin();
     }
     
