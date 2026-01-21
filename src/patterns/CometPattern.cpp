@@ -9,11 +9,11 @@ namespace Loml {
             for (auto j = 0; j < RingLengths.size(); j++) {
                 led.SetPixelColor(RingStartPositions[j] + (i % RingLengths[j]), mRingColors.at(j).Dim(20));
             }
-            DimAll(led);
+            DimRange(led);
             if (!Delay(50)) {
                 return;
             }
-            DimAll(led);
+            DimRange(led);
             if (!Delay(50)) {
                 return;
             }

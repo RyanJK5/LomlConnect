@@ -21,12 +21,14 @@ namespace Loml {
 
     template <int ColorCount>
     void RadiatePattern<ColorCount>::DisplayImpl(LEDStrip& led) {
+        constexpr static auto colorBrightness = 30;
+
         const auto displayRing = [&](RgbColor color, int32_t index) {
             const auto startPos = RingStartPositions.at(index); 
             const auto endPos = startPos + RingLengths.at(index);
 
             for (auto j = startPos; j < endPos; j++) {
-                led.SetPixelColor(j, color.Dim(30));
+                led.SetPixelColor(j, color.Dim(colorBrightness));
             }
             led.Show();
         };
@@ -46,10 +48,13 @@ namespace Loml {
         if (!Delay(500)) {
             return;
         }
-        for (auto i = 0; i < 50; i++) {
-            DimAll(led);
-            if (!Delay(50)) {
-                return;
+
+        for (auto i = RingLengths.size(); i > 0; i--) {
+            for (auto j = 0; j < colorBrightness; j++) {
+                DimRange(led, RingStartPositions.at(i - 1), RingLengths.at(i - 1));
+                if (!Delay(10)) {
+                    return;
+                }
             }
         }
     }

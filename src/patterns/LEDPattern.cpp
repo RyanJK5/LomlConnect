@@ -16,17 +16,23 @@ namespace Loml {
         return !mInterrupted;
     }
     
-    void LEDPattern::DimAll(LEDStrip& led) {
-        for (uint16_t i = 0; i < led.PixelCount(); i++) {
-            auto color = led.GetPixelColor(i);
+    void LEDPattern::DimRange(LEDStrip& led, uint16_t start, uint16_t length) {
+        if (length == 0) {
+            length = led.PixelCount();
+        }
+        for (uint16_t i = start; i < start + length; i++) {
+            const auto color = led.GetPixelColor(i);
             led.SetPixelColor(i, color.Dim(255 - 1));
         }
         led.Show();
     }
 
-    void LEDPattern::BrightenAll(LEDStrip& led) {
-        for (uint16_t i = 0; i < led.PixelCount(); i++) {
-            auto color = led.GetPixelColor(i);
+    void LEDPattern::BrightenRange(LEDStrip& led, uint16_t start, uint16_t length) {
+        if (length == 0) {
+            length = led.PixelCount();
+        }
+        for (uint16_t i = start; i < start + length; i++) {
+            const auto color = led.GetPixelColor(i);
             led.SetPixelColor(i, color.Brighten(255 - 1));
         }
         led.Show();

@@ -13,7 +13,8 @@ namespace Loml {
     LEDController::LEDController(const LEDSettings& settings) 
         : Controller{settings}
         , mStrip{settings.LightCount, settings.PinNumber} {
-        // mPatterns.emplace_back(std::make_unique<BlankPattern>());
+        mPatterns.emplace_back(std::make_unique<BlankPattern>());
+        mPatterns.emplace_back(std::make_unique<CrazyPattern>());
         mPatterns.emplace_back(std::make_unique<RadiatePattern<6>>(std::array{
             Colors::HotPink,
             Colors::Magenta,
@@ -22,7 +23,6 @@ namespace Loml {
             Colors::Cyan,
             Colors::Teal
         }));
-        mPatterns.emplace_back(std::make_unique<CrazyPattern>());
         mPatterns.emplace_back(std::make_unique<CometPattern>(std::array{
             Colors::HotPink,
             Colors::Magenta,

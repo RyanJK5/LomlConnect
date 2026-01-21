@@ -9,7 +9,7 @@ namespace Loml {
         constexpr BlankPattern() = default;
     protected:
         virtual void DisplayImpl(LEDStrip& led) override final {
-            led.Show();
+            vTaskDelay(5);
         }
     };
 }
