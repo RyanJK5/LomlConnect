@@ -1,9 +1,7 @@
-#ifndef __LomlPattern_hpp__
-#define __LomlPattern_hpp__
+#ifndef __XOPattern_hpp__
+#define __XOPattern_hpp__
 
 #include "patterns/LetterPattern.hpp"
-
-#include <memory>
 
 namespace Loml {
     template <typename Background>
@@ -23,13 +21,7 @@ namespace Loml {
 
     template <typename Background>
     void LomlPattern<Background>::DisplayImpl(LEDStrip& led) {
-		LetterPattern::DisplayLetterPattern(
-			led, mBackground, 
-			OrderedLPositions, 
-			OrderedOPositions, 
-			OrderedMPositions, 
-			OrderedLPositions
-		);
+        LetterPattern::DisplayLetterPattern(led, mBackground, OrderedXPositions, OrderedOPositions);
     }
 }
 

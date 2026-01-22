@@ -10,8 +10,6 @@ namespace Loml {
         virtual ~BackgroundLEDPattern() = default;
     protected:
         [[nodiscard]] constexpr auto InBackground() const -> bool { return mInBackground; }
-
-        virtual void DisplayImpl(LEDStrip& led) override = 0;
     private:
         bool mInBackground;
     };

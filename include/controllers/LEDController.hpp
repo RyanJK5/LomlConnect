@@ -40,6 +40,7 @@ namespace Loml {
         
         std::vector<std::unique_ptr<LEDPattern>> mPatterns;
         size_t mCurrentIndex = 0;
+        size_t mReceiveIndex = 0;
     };
 }
 
