@@ -6,8 +6,8 @@
 namespace Loml {
     class LomlPattern : public LEDPattern {
     public:
-        LomlPattern() = default;
-        
+        constexpr LomlPattern() = default;
+    protected:
         virtual void DisplayImpl(LEDStrip& led) override final;        
     };
 }

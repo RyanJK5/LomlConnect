@@ -8,12 +8,14 @@
 #include "patterns/BeatPattern.hpp"
 #include "patterns/BlankPattern.hpp"
 #include "patterns/RadiatePattern.hpp"
+#include "patterns/LomlPattern.hpp"
 
 namespace Loml {
     LEDController::LEDController(const LEDSettings& settings) 
         : Controller{settings}
         , mStrip{settings.LightCount, settings.PinNumber} {
         mPatterns.emplace_back(std::make_unique<BlankPattern>());
+        mPatterns.emplace_back(std::make_unique<LomlPattern>());
         mPatterns.emplace_back(std::make_unique<CrazyPattern>());
         mPatterns.emplace_back(std::make_unique<RadiatePattern<6>>(std::array{
             Colors::HotPink,
