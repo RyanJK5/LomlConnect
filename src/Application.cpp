@@ -10,6 +10,7 @@ namespace Loml {
         , mWiFi{wifiSetup} {
         mButton.AddSubscriber(mWiFi);
         mButton.AddSubscriber(mLED);
+        mWiFi.AddSubscriber(mLED);
     }
     
     void Application::Begin() {

@@ -39,10 +39,10 @@ namespace Loml {
 		mWifiClient.setInsecure();
 	
 		mPubSub.setServer(settings.Server.NetworkName, settings.Server.Port);
-	}
-	
-	void WiFiController::Publish() {
-		mPubSub.publish(mServerSettings.Topic, "Board 1");
+		mPubSub.setCallback([&](char* topic, byte*, unsigned int length){
+			Serial.println("Message received");
+			Publish({});
+		});
 	}
 	
 	void WiFiController::Reconnect() {
@@ -50,8 +50,7 @@ namespace Loml {
 			Serial.println("Connecting to MQTT Broker...");
 			if (mPubSub.connect(mServerSettings.SessionID, mServerSettings.Username, mServerSettings.Password)) {
 				Serial.println("Connected to MQTT Broker.");
-				mPubSub.subscribe("loml2");
-	
+				mPubSub.subscribe(mServerSettings.Subscription);
 			} 
 			else {
 				Serial.print("Error ");
@@ -74,6 +73,8 @@ namespace Loml {
 		if (args.Event == ButtonEvent::Short) {
 			return;
 		}
-		Serial.print("Diddy");
+
+		mPubSub.publish(mServerSettings.Username, "");
+		Serial.println("Published message");
 	}
 }

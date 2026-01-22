@@ -23,7 +23,7 @@ namespace Loml {
         int32_t     Port           = 0;
         const char* NetworkName    = nullptr;
         const char* SessionID      = nullptr;
-        const char* Topic          = nullptr;
+        const char* Subscription   = nullptr;
         const char* Username       = nullptr;
         const char* Password       = nullptr;
     };
@@ -44,8 +44,6 @@ namespace Loml {
         friend Controller<WiFiController>;
         
         WiFiController(const WiFiSettings& settings);
-
-        void Publish();
 
         virtual void OnMessage(const ButtonResult& result) override final;
     private:

@@ -1,4 +1,5 @@
 #include <memory>
+#include <random>
 #include <variant>
 
 #include "controllers/LEDController.hpp"
@@ -52,7 +53,16 @@ namespace Loml {
         }
     }
     
-    void LEDController::OnMessage(const WiFiResult& args) { }
+    void LEDController::OnMessage(const WiFiResult& args) {
+        Serial.println("Changing pattern");
+
+        static std::random_device rd{};
+        static std::mt19937 gen{rd()};
+        static std::uniform_int_distribution<> dis{0, 5};
+		
+        mPatterns.at(mCurrentIndex)->Interrupt();
+        mCurrentIndex = dis(gen) % mPatterns.size();
+    }
     
     void LEDController::UpdateImpl() {
         mStrip.ClearTo(Colors::Black);
