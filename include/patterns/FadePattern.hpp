@@ -3,6 +3,8 @@
 
 #include "patterns/BackgroundPattern.hpp"
 
+#include <utility>
+
 namespace Loml {
     template <int LevelCount>
     class FadePattern : public BackgroundPattern {
@@ -10,6 +12,9 @@ namespace Loml {
         using Array = std::array<std::vector<int32_t>, LevelCount>;
 
         constexpr FadePattern(bool inBackground, const Array& levels, RgbColor left, RgbColor right);
+    
+        void SetColors(RgbColor left, RgbColor right);
+        [[nodiscard]] auto GetColors() const -> std::pair<RgbColor, RgbColor>;
     protected:
         virtual void DisplayImpl(LEDStrip& led) override final;
     private:
@@ -47,6 +52,17 @@ namespace Loml {
             led.Show();
             std::ignore = Delay(20);
         }
+    }
+
+    template <int LevelCount>
+    void FadePattern<LevelCount>::SetColors(RgbColor left, RgbColor right) {
+        mLeft = left;
+        mRight = right;
+    }
+
+    template <int LevelCount>
+    auto FadePattern<LevelCount>::GetColors() const -> std::pair<RgbColor, RgbColor> {
+        return std::make_pair(mLeft, mRight);
     }
 }
 

@@ -8,6 +8,7 @@
 #include "patterns/CometPattern.hpp"
 #include "patterns/BeatPattern.hpp"
 #include "patterns/FadePattern.hpp"
+#include "patterns/DoubleFadePattern.hpp"
 #include "patterns/BlankPattern.hpp"
 #include "patterns/RadiatePattern.hpp"
 #include "patterns/LomlPattern.hpp"
@@ -48,10 +49,12 @@ namespace Loml {
 
         constexpr static auto levelSize = Levels.size();
 
-        mPatterns.emplace_back(std::make_unique<FadePattern<levelSize>>(
+        mPatterns.emplace_back(std::make_unique<DoubleFadePattern<levelSize>>(
             false,
             Levels,
             Colors::Blue,
+            Colors::Purple,
+            Colors::Aqua,
             Colors::Red
         ));
         mReceiveIndex = mPatterns.size();
