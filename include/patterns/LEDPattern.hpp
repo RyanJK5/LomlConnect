@@ -65,7 +65,7 @@ namespace Loml {
 
         static void DimRange(LEDStrip& led, uint16_t start = 0, uint16_t length = 0);
         static void BrightenRange(LEDStrip& led, uint16_t start = 0, uint16_t length = 0);
-    
+    private:
         std::atomic<bool> mInterrupted = false;
     };
 }

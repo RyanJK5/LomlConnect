@@ -7,6 +7,7 @@
 #include "patterns/CrazyPattern.hpp"
 #include "patterns/CometPattern.hpp"
 #include "patterns/BeatPattern.hpp"
+#include "patterns/FadePattern.hpp"
 #include "patterns/BlankPattern.hpp"
 #include "patterns/RadiatePattern.hpp"
 #include "patterns/LomlPattern.hpp"
@@ -15,8 +16,10 @@ namespace Loml {
     LEDController::LEDController(const LEDSettings& settings) 
         : Controller{settings}
         , mStrip{settings.LightCount, settings.PinNumber} {
+
+        LomlPattern<FadePattern> a {Colors::Blue, Colors::Purple};
         mPatterns.emplace_back(std::make_unique<BlankPattern>());
-        mPatterns.emplace_back(std::make_unique<LomlPattern>());
+        mPatterns.emplace_back(std::make_unique<LomlPattern<FadePattern>>(Colors::Blue, Colors::Purple));
         mPatterns.emplace_back(std::make_unique<CrazyPattern>());
         mPatterns.emplace_back(std::make_unique<RadiatePattern<6>>(std::array{
             Colors::HotPink,

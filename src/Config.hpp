@@ -23,12 +23,12 @@ namespace Loml::Config {
     };
 
     constexpr inline ServerSettings DefaultServerSettings {
-        .Port        = LOML_SERVER_PORT,
-        .NetworkName = LOML_SERVER_URL,
-        .SessionID   = LOML_SESSION_ID,
-        .Topic       = "loml",
-        .Username    = LOML_SERVER_USERNAME,
-        .Password    = LOML_SERVER_PASSWORD
+        .Port         = LOML_SERVER_PORT,
+        .NetworkName  = LOML_SERVER_URL,
+        .SessionID    = LOML_SERVER_SESSION_ID,
+        .Subscription = LOML_SERVER_SUBSCRIPTION,
+        .Username     = LOML_SERVER_USERNAME,
+        .Password     = LOML_SERVER_PASSWORD
     };
 }
 

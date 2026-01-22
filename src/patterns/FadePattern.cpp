@@ -15,9 +15,9 @@ namespace Loml {
         }
         mColorCounter++;
         
-        if (!mSurrenderShowing) {
+        if (!InBackground()) {
             led.Show();
-            Delay(20);
+            std::ignore = Delay(20);
         }
     }
 }
