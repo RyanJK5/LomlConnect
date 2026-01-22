@@ -1,5 +1,5 @@
-#ifndef __LEDPattern_hpp__
-#define __LEDPattern_hpp__
+#ifndef LEDPattern_hpp_
+#define LEDPattern_hpp_
 
 #include <atomic>
 #include <NeoPixelBus.h>

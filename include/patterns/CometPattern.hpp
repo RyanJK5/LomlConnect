@@ -1,5 +1,5 @@
-#ifndef __CometPattern_hpp__
-#define __CometPattern_hpp__
+#ifndef CometPattern_hpp_
+#define CometPattern_hpp_
 
 #include "patterns/LEDPattern.hpp"
 

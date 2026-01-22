@@ -1,5 +1,5 @@
-#ifndef __BeatPattern_hpp__
-#define __BeatPattern_hpp__
+#ifndef BeatPattern_hpp_
+#define BeatPattern_hpp_
 
 #include "patterns/LEDPattern.hpp"
 #include "patterns/Colors.hpp"

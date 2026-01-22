@@ -1,5 +1,5 @@
-#ifndef __Application_hpp__
-#define __Application_hpp__
+#ifndef Application_hpp_
+#define Application_hpp_
 
 #include <freertos/FreeRTOS.h>
 #include <freertos/task.h>

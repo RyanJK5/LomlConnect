@@ -1,5 +1,5 @@
-#ifndef __LEDController_hpp__
-#define __LEDController_hpp__
+#ifndef LEDController_hpp_
+#define LEDController_hpp_
 
 #include <NeoPixelBus.h>
 #include <cstdint>
@@ -20,7 +20,6 @@ namespace Loml {
     };
 
     using LEDSettings = ControllerSettings<LEDController>;
-    using LEDResult = ControllerResult<LEDController>;
 
     class LEDController 
         : public Controller<LEDController>
@@ -39,8 +38,10 @@ namespace Loml {
         LEDStrip mStrip;
         
         std::vector<std::unique_ptr<LEDPattern>> mPatterns;
-        size_t mCurrentIndex = 0;
-        size_t mReceiveIndex = 0;
+        
+        int32_t mPrevIndex = 0;
+        int32_t mCurrentIndex = 0;
+        int32_t mReceiveIndex = 0;
     };
 }
 

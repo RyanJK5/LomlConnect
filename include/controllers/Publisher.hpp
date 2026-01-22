@@ -1,5 +1,5 @@
-#ifndef __Publisher_hpp__
-#define __Publisher_hpp__
+#ifndef Publisher_hpp_
+#define Publisher_hpp_
 
 #include "controllers/ControllerSubscriber.hpp"
 #include "controllers/ControllerData.hpp"

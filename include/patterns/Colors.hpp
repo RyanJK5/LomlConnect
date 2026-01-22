@@ -1,5 +1,5 @@
-#ifndef __Colors_h__
-#define __Colors_h__
+#ifndef Colors_h_
+#define Colors_h_
 
 #include <NeoPixelBus.h>
 

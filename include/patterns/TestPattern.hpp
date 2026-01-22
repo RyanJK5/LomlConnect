@@ -1,5 +1,5 @@
-#ifndef __TestPattern_hpp__
-#define __TestPattern_hpp__
+#ifndef TestPattern_hpp_
+#define TestPattern_hpp_
 
 #include "patterns/LEDPattern.hpp"
 

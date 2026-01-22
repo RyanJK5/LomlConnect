@@ -1,5 +1,5 @@
-#ifndef __WiFiController_hpp__
-#define __WiFiController_hpp__
+#ifndef WiFiController_hpp_
+#define WiFiController_hpp_
 
 #include <PubSubClient.h>
 #include <WiFiClientSecure.h>

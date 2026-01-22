@@ -1,5 +1,5 @@
-#ifndef __HeartPattern_hpp__
-#define __HeartPattern_hpp__
+#ifndef HeartPattern_hpp_
+#define HeartPattern_hpp_
 
 #include "patterns/LEDPattern.hpp"
 

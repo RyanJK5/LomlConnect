@@ -1,5 +1,5 @@
-#ifndef __CrazyPattern_hpp__
-#define __CrazyPattern_hpp__
+#ifndef CrazyPattern_hpp_
+#define CrazyPattern_hpp_
 
 #include "patterns/LEDPattern.hpp"
 

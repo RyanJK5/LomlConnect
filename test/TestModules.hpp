@@ -1,5 +1,5 @@
-#ifndef __TestModules_hpp__
-#define __TestModules_hpp__
+#ifndef TestModules_hpp_
+#define TestModules_hpp_
 
 namespace Loml {
     namespace ControllerTest {

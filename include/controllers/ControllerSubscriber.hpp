@@ -1,5 +1,5 @@
-#ifndef __ControllerSubscriber_hpp__
-#define __ControllerSubscriber_hpp__
+#ifndef ControllerSubscriber_hpp_
+#define ControllerSubscriber_hpp_
 
 #include "controllers/ControllerData.hpp"
 

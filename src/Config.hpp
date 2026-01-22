@@ -1,5 +1,5 @@
-#ifndef __Config_hpp__
-#define __Config_hpp__
+#ifndef Config_hpp_
+#define Config_hpp_
 
 #include "controllers/LEDController.hpp"
 #include "controllers/ButtonController.hpp"
@@ -13,7 +13,7 @@ namespace Loml::Config {
 
     constexpr inline ButtonSettings DefaultButtonSettings {
         .PinNumber           = 18,
-        .LongPressDurationMs = 3000
+        .LongPressDurationMs = 1000
     };
 
     constexpr inline LocalSettings DefaultLocalSettings {

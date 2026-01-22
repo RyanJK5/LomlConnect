@@ -1,5 +1,5 @@
-#ifndef __ControllerData_h__
-#define __ControllerData_h__
+#ifndef ControllerData_h_
+#define ControllerData_h_
 
 namespace Loml {
     template <typename Controller>

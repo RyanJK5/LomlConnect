@@ -1,7 +1,8 @@
-#ifndef __PatternSymbols_hpp__
-#define __PatternSymbols_hpp__
+#ifndef PatternSymbols_hpp_
+#define PatternSymbols_hpp_
 
 #include <array>
+#include <numeric>
 #include <vector>
 
 namespace Loml {
@@ -40,6 +41,17 @@ namespace Loml {
     };
 
 
+    inline std::array RingLevels = [](){
+        std::array<std::vector<int32_t>, RingLengths.size()> ret{};
+
+        for (auto i = 0; i < ret.size(); i++) {
+            ret[i].resize(RingLengths[i]);
+            std::iota(ret[i].begin(), ret[i].end(), RingStartPositions[i]);
+        }
+
+        return ret;
+    }();
+
     constexpr inline std::array OrderedLPositions {
         26, 12, 11, 10, 21, 20, 19, 33
     };
@@ -57,7 +69,8 @@ namespace Loml {
     };
 
     constexpr inline std::array OrderedXPositions {
-        20, 12, 0, 3
+        25, 12, 3, 0, 7, 18, 33,
+        29, 15, 5, 0, 1, 9, 21
     };
 }
 

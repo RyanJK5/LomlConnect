@@ -1,17 +1,18 @@
-#ifndef __XOPattern_hpp__
-#define __XOPattern_hpp__
+#ifndef XOPattern_hpp_
+#define XOPattern_hpp_
 
 #include "patterns/LetterPattern.hpp"
 
 namespace Loml {
     template <typename Background>
-    class LomlPattern : public LetterPattern {
+    class XOPattern : public LetterPattern {
     public:
-		static_assert(std::is_base_of_v<BackgroundLEDPattern, Background>);
+		static_assert(std::is_base_of_v<BackgroundPattern, Background>);
 
         template <typename... Args>
-        constexpr LomlPattern(Args&&... args)
-            : mBackground(true, std::forward<Args>(args)...)
+        constexpr XOPattern(RgbColor letterColor, Args&&... args)
+            : LetterPattern(letterColor, 20, 50)
+            , mBackground(true, std::forward<Args>(args)...)
         { }
     protected:
         virtual void DisplayImpl(LEDStrip& led) override final;
@@ -20,8 +21,11 @@ namespace Loml {
     };
 
     template <typename Background>
-    void LomlPattern<Background>::DisplayImpl(LEDStrip& led) {
-        LetterPattern::DisplayLetterPattern(led, mBackground, OrderedXPositions, OrderedOPositions);
+    void XOPattern<Background>::DisplayImpl(LEDStrip& led) {
+        DisplayLetterPattern(led, mBackground,
+            OrderedXPositions, OrderedOPositions,
+            OrderedXPositions, OrderedOPositions
+        );
     }
 }
 

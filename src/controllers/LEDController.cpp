@@ -11,13 +11,13 @@
 #include "patterns/BlankPattern.hpp"
 #include "patterns/RadiatePattern.hpp"
 #include "patterns/LomlPattern.hpp"
+#include "patterns/XOPattern.hpp"
 
 namespace Loml {
     LEDController::LEDController(const LEDSettings& settings) 
-        : Controller{settings}
-        , mStrip{settings.LightCount, settings.PinNumber} {
+        : Controller(settings)
+        , mStrip(settings.LightCount, settings.PinNumber) {
 
-        LomlPattern<FadePattern> a {Colors::Blue, Colors::Purple};
         mPatterns.emplace_back(std::make_unique<BlankPattern>());
         mPatterns.emplace_back(std::make_unique<CrazyPattern>());
         mPatterns.emplace_back(std::make_unique<RadiatePattern<6>>(std::array{
@@ -45,11 +45,40 @@ namespace Loml {
             Colors::Teal,
             Colors::SeaGreen
         }));
+
+        constexpr static auto levelSize = Levels.size();
+
+        mPatterns.emplace_back(std::make_unique<FadePattern<levelSize>>(
+            false,
+            Levels,
+            Colors::Blue,
+            Colors::Red
+        ));
         mReceiveIndex = mPatterns.size();
 
-        mPatterns.emplace_back(std::make_unique<LomlPattern<FadePattern>>(
+        mPatterns.emplace_back(std::make_unique<LomlPattern<FadePattern<levelSize>>>(
+            Colors::Red,
+            Levels,
             Colors::Blue, 
             Colors::Purple
+        ));
+        mPatterns.emplace_back(std::make_unique<XOPattern<FadePattern<levelSize>>>(
+            Colors::Red,
+            Levels,
+            Colors::Blue, 
+            Colors::Purple
+        ));
+        mPatterns.emplace_back(std::make_unique<LomlPattern<FadePattern<levelSize>>>(
+            Colors::Blue,
+            Levels,
+            Colors::Pink,
+            Colors::Red
+        ));
+        mPatterns.emplace_back(std::make_unique<XOPattern<FadePattern<levelSize>>>(
+            Colors::Blue,
+            Levels,
+            Colors::Pink, 
+            Colors::Red
         ));
 
         mStrip.Begin();
@@ -58,7 +87,13 @@ namespace Loml {
     void LEDController::OnMessage(const ButtonResult& args) {
         if (args.Event == ButtonEvent::Short) {
             mPatterns.at(mCurrentIndex)->Interrupt();
-            mCurrentIndex = (mCurrentIndex + 1) % mReceiveIndex;
+            if (mCurrentIndex >= mReceiveIndex) {
+                mCurrentIndex = mPrevIndex;
+            }
+            else {
+                mCurrentIndex = (mCurrentIndex + 1) % mReceiveIndex;
+            }
+            mPrevIndex = mCurrentIndex;
         }
     }
     
@@ -67,10 +102,15 @@ namespace Loml {
 
         static std::random_device rd{};
         static std::mt19937 gen{rd()};
-        std::uniform_int_distribution<> dis{mReceiveIndex, mPatterns.size() - 1};
+        std::uniform_int_distribution<> dis{mReceiveIndex, static_cast<int32_t>(mPatterns.size()) - 1};
 		
+        auto newIndex = dis(gen);
+        while (newIndex == mCurrentIndex) {
+            newIndex = dis(gen);
+        }
+
         mPatterns.at(mCurrentIndex)->Interrupt();
-        mCurrentIndex = dis(gen);
+        mCurrentIndex = newIndex;
     }
     
     void LEDController::UpdateImpl() {

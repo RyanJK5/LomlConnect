@@ -1,7 +1,7 @@
-#ifndef __RadiatePattern_hpp__
-#define __RadiatePattern_hpp__
+#ifndef RadiatePattern_hpp_
+#define RadiatePattern_hpp_
 
-#include <patterns/LEDPattern.hpp>
+#include "patterns/LEDPattern.hpp"
 
 namespace Loml {
     template <int ColorCount>

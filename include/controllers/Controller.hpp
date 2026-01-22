@@ -1,5 +1,5 @@
-#ifndef __Controller_hpp__
-#define __Controller_hpp__
+#ifndef Controller_hpp_
+#define Controller_hpp_
 
 #include "controllers/ControllerData.hpp"
 #include "controllers/Publisher.hpp"

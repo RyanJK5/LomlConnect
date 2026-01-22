@@ -1,5 +1,5 @@
-#ifndef __ButtonController_hpp__
-#define __ButtonController_hpp__
+#ifndef ButtonController_hpp_
+#define ButtonController_hpp_
 
 #include <cstdint>
 #include <optional>
