@@ -2,6 +2,7 @@
 #include <numeric>
 
 #include "patterns/LomlPattern.hpp"
+#include "patterns/FadePattern.hpp"
 #include "patterns/Colors.hpp"
 
 namespace Loml {
@@ -22,32 +23,16 @@ namespace Loml {
 			21, 10, 11, 12, 26, 13, 4, 14, 28, 15, 16, 17, 33
 		};
 
-		auto counterX = 0;
-		auto counterY = 0;
-		const auto showBg = [&](const auto& arr) {
-			for (auto pos : arr) {
-				led.SetPixelColor(pos, 
-					RgbColor::LinearBlend(
-						Colors::Blue, Colors::Purple, (counterX % 14) / 14.f
-					).Dim(5)
-				);
-				counterY++;
-			}
-			counterX++;
-		};
+		FadePattern background{Colors::Blue, Colors::Purple, true};
 
 		const auto showPartOfLetter = [&](const auto& letter, int32_t index) {
 			for (int k = 0; k < 100; k += 20) {
-				for (const auto& level : Levels) {
-					showBg(level);
-				}
+				background.Display(led);
 				for (auto j = 0; j <= index; j++) {
 					led.SetPixelColor(letter[j], Colors::Red.Dim(20));
 				}
 				led.Show();
 
-				counterX++;
-				counterY++;
 				if (!Delay(20)) {
 					return false;
 				}
