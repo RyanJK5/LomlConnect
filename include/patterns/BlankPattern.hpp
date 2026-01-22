@@ -9,8 +9,8 @@ namespace Loml {
         constexpr BlankPattern() = default;
     protected:
         virtual void DisplayImpl(LEDStrip& led) override final {
-            vTaskDelay(5);
             led.Show();
+            std::ignore = Delay(5);
         }
     };
 }
