@@ -3,12 +3,11 @@
 #include <variant>
 
 #include "controllers/LEDController.hpp"
-#include "patterns/TestPattern.hpp"
 #include "patterns/CrazyPattern.hpp"
 #include "patterns/CometPattern.hpp"
 #include "patterns/BeatPattern.hpp"
 #include "patterns/FadePattern.hpp"
-#include "patterns/DoubleFadePattern.hpp"
+#include "patterns/MultiFadePattern.hpp"
 #include "patterns/BlankPattern.hpp"
 #include "patterns/RadiatePattern.hpp"
 #include "patterns/LomlPattern.hpp"
@@ -49,13 +48,21 @@ namespace Loml {
 
         constexpr static auto levelSize = Levels.size();
 
-        mPatterns.emplace_back(std::make_unique<DoubleFadePattern<levelSize>>(
+        mPatterns.emplace_back(std::make_unique<MultiFadePattern<levelSize, 4>>(
             false,
             Levels,
-            Colors::Blue,
-            Colors::Purple,
-            Colors::Aqua,
-            Colors::Red
+            std::array {
+                Colors::Blue,
+                Colors::Purple,
+                Colors::Green,
+                Colors::FireBrick
+            },
+            std::array {
+                Colors::Red,
+                Colors::Aqua,
+                Colors::Yellow,
+                Colors::ElectricPurple
+            }
         ));
         mReceiveIndex = mPatterns.size();
 
@@ -71,17 +78,29 @@ namespace Loml {
             Colors::Blue, 
             Colors::Purple
         ));
-        mPatterns.emplace_back(std::make_unique<LomlPattern<FadePattern<levelSize>>>(
+        mPatterns.emplace_back(std::make_unique<LomlPattern<MultiFadePattern<levelSize, 2>>>(
             Colors::Blue,
             Levels,
-            Colors::Pink,
-            Colors::Red
+            std::array {
+                Colors::Red,
+                Colors::LightYellow,
+            },
+            std::array {
+                Colors::Pink,
+                Colors::Orange
+            }
         ));
-        mPatterns.emplace_back(std::make_unique<XOPattern<FadePattern<levelSize>>>(
+        mPatterns.emplace_back(std::make_unique<XOPattern<MultiFadePattern<levelSize, 2>>>(
             Colors::Blue,
             Levels,
-            Colors::Pink, 
-            Colors::Red
+            std::array {
+                Colors::Red,
+                Colors::LightYellow,
+            },
+            std::array {
+                Colors::Pink,
+                Colors::Orange
+            }
         ));
 
         mStrip.Begin();
