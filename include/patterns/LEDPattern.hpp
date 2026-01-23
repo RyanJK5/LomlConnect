@@ -24,8 +24,9 @@ namespace Loml {
         virtual ~LEDPattern() = default;
 
         void Interrupt();
+        void SetLifetime(int64_t lifetimeMs);
 
-        void Display(LEDStrip& led);
+        auto Display(LEDStrip& led) -> bool;
     protected:
         virtual void DisplayImpl(LEDStrip& led) = 0;
     
@@ -35,6 +36,7 @@ namespace Loml {
         static void BrightenRange(LEDStrip& led, uint16_t start = 0, uint16_t length = 0);
     private:
         std::atomic<bool> mInterrupted = false;
+        int64_t mLifetimeMs = -1;
     };
 }
 

@@ -108,14 +108,7 @@ namespace Loml {
     
     void LEDController::OnMessage(const ButtonResult& args) {
         if (args.Event == ButtonEvent::Short) {
-            mPatterns.at(mCurrentIndex)->Interrupt();
-            if (mCurrentIndex >= mReceiveIndex) {
-                mCurrentIndex = mPrevIndex;
-            }
-            else {
-                mCurrentIndex = (mCurrentIndex + 1) % mReceiveIndex;
-            }
-            mPrevIndex = mCurrentIndex;
+            ChangePattern();
         }
     }
     
@@ -133,10 +126,26 @@ namespace Loml {
 
         mPatterns.at(mCurrentIndex)->Interrupt();
         mCurrentIndex = newIndex;
+        mPatterns.at(newIndex)->SetLifetime(5000);
     }
     
+    void LEDController::ChangePattern() {
+        mPatterns.at(mCurrentIndex)->Interrupt();
+        if (mCurrentIndex >= mReceiveIndex) {
+            mCurrentIndex = mPrevIndex;
+        }
+        else {
+            mCurrentIndex = (mCurrentIndex + 1) % mReceiveIndex;
+        }
+        mPrevIndex = mCurrentIndex;
+    }
+
     void LEDController::UpdateImpl() {
         mStrip.ClearTo(Colors::Black);
-        mPatterns.at(mCurrentIndex)->Display(mStrip);
+        
+        auto success = mPatterns.at(mCurrentIndex)->Display(mStrip);
+        if (!success) {
+            ChangePattern();
+        }
     }
 }

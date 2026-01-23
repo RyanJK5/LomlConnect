@@ -3,16 +3,31 @@
 namespace Loml {
     void LEDPattern::Interrupt() {
         Serial.println("Interrupted");
+        mLifetimeMs = -1;
         mInterrupted = true;
     }
 
-    void LEDPattern::Display(LEDStrip& led) {
+    void LEDPattern::SetLifetime(int64_t lifetimeMs) {
+        assert(lifetimeMs >= 0);
+        mLifetimeMs = lifetimeMs;
+    }
+
+    auto LEDPattern::Display(LEDStrip& led) -> bool {
         DisplayImpl(led);
         mInterrupted = false;
+        if (mLifetimeMs >= 0) {
+            return mLifetimeMs > 0;
+        }
+        else {
+            return true;
+        }
     }
 
     [[nodiscard]] auto LEDPattern::Delay(int64_t delayMs) -> bool {
         vTaskDelay(pdMS_TO_TICKS(delayMs));
+        if (mLifetimeMs >= 0) {
+            mLifetimeMs = std::max(0LL, mLifetimeMs - delayMs);
+        }
         return !mInterrupted;
     }
     

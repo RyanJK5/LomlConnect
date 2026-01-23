@@ -33,6 +33,8 @@ namespace Loml {
         virtual void OnMessage(const ButtonResult& args) override final;
         virtual void OnMessage(const WiFiResult& args) override final;
     private:
+        void ChangePattern();
+
         void UpdateImpl();
     private:
         LEDStrip mStrip;
