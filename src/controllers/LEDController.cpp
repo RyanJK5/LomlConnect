@@ -144,7 +144,6 @@ namespace Loml {
 
         mPatterns.at(mCurrentIndex)->Interrupt();
         mCurrentIndex = newIndex;
-        mPatterns.at(newIndex)->SetLifetime(5000);
     }
     
     void LEDController::ChangePattern() {
