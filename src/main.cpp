@@ -4,7 +4,7 @@
 #include "Application.hpp"
 #include "Config.hpp"
 
-std::optional<Loml::Application> app;
+static std::optional<Loml::Application> app;
 
 void setup() {
 	Serial.begin(115200);
