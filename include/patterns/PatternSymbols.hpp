@@ -72,6 +72,10 @@ namespace Loml {
         25, 12, 3, 0, 7, 18, 33,
         29, 15, 5, 0, 1, 9, 21
     };
+
+    constexpr inline std::array OrderedHeartPositions {
+        0, 5, 6, 7, 8, 1, 2, 3, 15, 16, 17, 18, 19, 35, 20, 9, 10, 11, 12
+    };
 }
 
 #endif
