@@ -7,6 +7,7 @@
 #include "patterns/CometPattern.hpp"
 #include "patterns/BeatPattern.hpp"
 #include "patterns/FadePattern.hpp"
+#include "patterns/HeartPattern.hpp"
 #include "patterns/MultiFadePattern.hpp"
 #include "patterns/BlankPattern.hpp"
 #include "patterns/RadiatePattern.hpp"
@@ -18,8 +19,18 @@ namespace Loml {
         : Controller(settings)
         , mStrip(settings.LightCount, settings.PinNumber) {
 
+        AddNormalPatterns();
+        mReceiveIndex = mPatterns.size();
+        AddSpecialPatterns();
+
+        mStrip.Begin();
+    }
+    
+    void LEDController::AddNormalPatterns() {
         mPatterns.emplace_back(std::make_unique<BlankPattern>());
+        
         mPatterns.emplace_back(std::make_unique<CrazyPattern>());
+        
         mPatterns.emplace_back(std::make_unique<RadiatePattern<6>>(std::array{
             Colors::HotPink,
             Colors::Magenta,
@@ -28,6 +39,7 @@ namespace Loml {
             Colors::Cyan,
             Colors::Teal
         }));
+        
         mPatterns.emplace_back(std::make_unique<CometPattern>(std::array{
             Colors::HotPink,
             Colors::Magenta,
@@ -36,6 +48,7 @@ namespace Loml {
             Colors::Cyan,
             Colors::Teal
         }));
+        
         mPatterns.emplace_back(std::make_unique<BeatPattern<7>>(std::array{
             Colors::HotPink,
             Colors::Magenta,
@@ -46,9 +59,7 @@ namespace Loml {
             Colors::SeaGreen
         }));
 
-        constexpr static auto levelSize = Levels.size();
-
-        mPatterns.emplace_back(std::make_unique<MultiFadePattern<levelSize, 4>>(
+        mPatterns.emplace_back(std::make_unique<MultiFadePattern<Levels.size(), 4>>(
             false,
             Levels,
             std::array {
@@ -64,8 +75,17 @@ namespace Loml {
                 Colors::ElectricPurple
             }
         ));
-        mReceiveIndex = mPatterns.size();
+    }
 
+    void LEDController::AddSpecialPatterns() {
+        constexpr static auto levelSize = Levels.size();
+        
+        mPatterns.emplace_back(std::make_unique<HeartPattern<FadePattern<RingLevels.size()>>>(
+            Colors::Red,
+            RingLevels,
+            Colors::Blue,
+            Colors::Purple
+        ));
         mPatterns.emplace_back(std::make_unique<LomlPattern<FadePattern<levelSize>>>(
             Colors::Red,
             Levels,
@@ -79,7 +99,7 @@ namespace Loml {
             Colors::Purple
         ));
         mPatterns.emplace_back(std::make_unique<LomlPattern<MultiFadePattern<levelSize, 2>>>(
-            Colors::Blue,
+            Colors::Red,
             Levels,
             std::array {
                 Colors::Red,
@@ -91,7 +111,7 @@ namespace Loml {
             }
         ));
         mPatterns.emplace_back(std::make_unique<XOPattern<MultiFadePattern<levelSize, 2>>>(
-            Colors::Blue,
+            Colors::Red,
             Levels,
             std::array {
                 Colors::Red,
@@ -102,10 +122,8 @@ namespace Loml {
                 Colors::Orange
             }
         ));
-
-        mStrip.Begin();
     }
-    
+
     void LEDController::OnMessage(const ButtonResult& args) {
         if (args.Event == ButtonEvent::Short) {
             ChangePattern();
