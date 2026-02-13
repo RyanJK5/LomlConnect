@@ -14,10 +14,13 @@ namespace Loml {
     template <typename Derived>
     class Controller : public Publisher<Derived> {
     public:
-        Controller(const ControllerSettings<Derived>& controllerSettings);
-        virtual ~Controller() = default;
-    
         void CreateTask(const TaskSettings& taskSettings);
+    protected:
+        ~Controller() = default;
+
+        friend Derived;
+    private:
+        Controller(const ControllerSettings<Derived>& controllerSettings);
     };
 
     template <typename Derived>

@@ -9,7 +9,8 @@
 namespace Loml {
     enum struct PatternMode {
         Default,
-        Confirming,
+        ConfirmingSent,
+        ConfirmingReceived,
         Sending,
         Receiving
     };

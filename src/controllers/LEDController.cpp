@@ -15,7 +15,7 @@
 #include "patterns/XOPattern.hpp"
 
 namespace Loml {
-    constexpr static int64_t ConfirmHoldTime = 50LL;
+    constexpr static auto ConfirmHoldTime = 50LL;
 
     LEDController::LEDController(const LEDSettings& settings) 
         : Controller(settings)
@@ -158,7 +158,7 @@ namespace Loml {
                 mMessagePatterns.at(mCurrentIndex)->Interrupt();
             
                 if (mCurrentIndex != 0) {
-                    mMode = PatternMode::Confirming;
+                    mMode = PatternMode::ConfirmingSent;
                     Publish(LEDResult{.PatternIndex=static_cast<size_t>(mCurrentIndex)});
                 }
                 else {
@@ -176,7 +176,8 @@ namespace Loml {
             case PatternMode::Default:
                 mPatterns.at(mCurrentIndex)->Interrupt();
                 break;
-            case PatternMode::Confirming:
+            case PatternMode::ConfirmingSent:
+            case PatternMode::ConfirmingReceived:
                 mConfirmPattern->Interrupt();
                 break;
             case PatternMode::Receiving:
@@ -184,7 +185,8 @@ namespace Loml {
                 mMessagePatterns.at(mCurrentIndex)->Interrupt();
                 break;
         }
-		mMode = PatternMode::Receiving;
+        mConfirmPattern->SetLifetime(ConfirmHoldTime);
+		mMode = PatternMode::ConfirmingReceived;
         
         mPatterns.at(mCurrentIndex)->Interrupt();
         mCurrentIndex = args.PatternIndex;
@@ -205,9 +207,12 @@ namespace Loml {
                 mMessagePatterns.at(mCurrentIndex)->Interrupt();
                 mCurrentIndex = (mCurrentIndex + 1) % mMessagePatterns.size();
                 break;
-            case PatternMode::Confirming:
+            case PatternMode::ConfirmingSent:
                 mConfirmPattern->Interrupt();
                 mCurrentIndex = mPrevIndex;
+                break;
+            case PatternMode::ConfirmingReceived:
+                mConfirmPattern->Interrupt();
                 break;
         }
     }
@@ -219,7 +224,8 @@ namespace Loml {
             switch (mMode) {
                 case PatternMode::Default:
                     return mPatterns.at(mCurrentIndex)->Display(mStrip);
-                case PatternMode::Confirming:
+                case PatternMode::ConfirmingSent:
+                case PatternMode::ConfirmingReceived:
                     return mConfirmPattern->Display(mStrip);
                 case PatternMode::Receiving:
                 case PatternMode::Sending:
@@ -227,11 +233,21 @@ namespace Loml {
             }
             return false;
         }();
-        if (!success) {
-            ChangePattern();
-            if (mMode == PatternMode::Confirming) {
+        
+        if (success) {
+            return;
+        }
+        
+        ChangePattern();
+        switch (mMode) {
+            case PatternMode::ConfirmingSent:
                 mMode = PatternMode::Default;
-            }
+                break;
+            case PatternMode::ConfirmingReceived:
+                mMode = PatternMode::Receiving;
+                break;
+            default:
+                break;
         }
     }
 }
