@@ -20,6 +20,7 @@ namespace Loml {
     };
 
     using LEDSettings = ControllerSettings<LEDController>;
+    using LEDResult   = ControllerResult<LEDController>;
 
     class LEDController 
         : public Controller<LEDController>
@@ -43,10 +44,13 @@ namespace Loml {
         LEDStrip mStrip;
         
         std::vector<std::unique_ptr<LEDPattern>> mPatterns;
+        std::vector<std::unique_ptr<LEDPattern>> mMessagePatterns;
+        std::unique_ptr<LEDPattern> mConfirmPattern;
         
-        int32_t mPrevIndex = 0;
-        int32_t mCurrentIndex = 0;
-        int32_t mReceiveIndex = 0;
+        PatternMode mMode = PatternMode::Default;
+
+        size_t mPrevIndex = 0;
+        size_t mCurrentIndex = 0;
     };
 }
 

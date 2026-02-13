@@ -8,7 +8,7 @@ namespace Loml {
         : mLED{ledSetup}
         , mButton{buttonSetup}
         , mWiFi{wifiSetup} {
-        mButton.AddSubscriber(mWiFi);
+        mLED.AddSubscriber(mWiFi);
         mButton.AddSubscriber(mLED);
         mWiFi.AddSubscriber(mLED);
     }

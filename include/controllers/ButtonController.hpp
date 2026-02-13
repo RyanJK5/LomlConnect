@@ -7,9 +7,17 @@
 #include "controllers/Controller.hpp"
 
 namespace Loml {
-    enum class ButtonEvent {
-        Short,
-        Long
+    enum struct PatternMode {
+        Default,
+        Confirming,
+        Sending,
+        Receiving
+    };
+
+    enum struct ButtonEvent {
+        Cycle,
+        SelectMessage,
+        SendMessage,
     };
 
     class ButtonController;
@@ -22,7 +30,7 @@ namespace Loml {
 
     template <>
     struct ControllerResult<ButtonController> {
-        std::optional<ButtonEvent> Event;
+        ButtonEvent Event;
     };
 
     using ButtonSettings = ControllerSettings<ButtonController>;
@@ -36,6 +44,7 @@ namespace Loml {
     private:
         void UpdateImpl();
     private:
+        PatternMode mMode = PatternMode::Default;
         ButtonSettings mSettings;
     };
 }

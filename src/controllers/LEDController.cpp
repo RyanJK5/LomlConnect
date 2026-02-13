@@ -15,13 +15,17 @@
 #include "patterns/XOPattern.hpp"
 
 namespace Loml {
+    constexpr static int64_t ConfirmHoldTime = 50LL;
+
     LEDController::LEDController(const LEDSettings& settings) 
         : Controller(settings)
         , mStrip(settings.LightCount, settings.PinNumber) {
 
         AddNormalPatterns();
-        mReceiveIndex = mPatterns.size();
         AddSpecialPatterns();
+
+        mConfirmPattern = std::make_unique<BeatPattern<1>>(std::array{Colors::LightBlue}, 10, ConfirmHoldTime);
+        mConfirmPattern->SetLifetime(ConfirmHoldTime);
 
         mStrip.Begin();
     }
@@ -65,13 +69,13 @@ namespace Loml {
             std::array {
                 Colors::Blue,
                 Colors::Purple,
-                Colors::Green,
+                Colors::SeaGreen,
                 Colors::FireBrick
             },
             std::array {
                 Colors::Red,
                 Colors::Aqua,
-                Colors::Yellow,
+                Colors::Teal,
                 Colors::ElectricPurple
             }
         ));
@@ -80,89 +84,154 @@ namespace Loml {
     void LEDController::AddSpecialPatterns() {
         constexpr static auto levelSize = Levels.size();
         
-        mPatterns.emplace_back(std::make_unique<HeartPattern<FadePattern<RingLevels.size()>>>(
+        mMessagePatterns.emplace_back(std::make_unique<BlankPattern>());
+        mMessagePatterns.emplace_back(std::make_unique<HeartPattern<FadePattern<levelSize>>>(
             Colors::Red,
-            RingLevels,
+            Levels,
             Colors::Blue,
             Colors::Purple
         ));
-        mPatterns.emplace_back(std::make_unique<LomlPattern<FadePattern<levelSize>>>(
+        mMessagePatterns.emplace_back(std::make_unique<LomlPattern<FadePattern<levelSize>>>(
             Colors::Red,
             Levels,
             Colors::Blue, 
             Colors::Purple
         ));
-        mPatterns.emplace_back(std::make_unique<XOPattern<FadePattern<levelSize>>>(
+        mMessagePatterns.emplace_back(std::make_unique<XOPattern<FadePattern<levelSize>>>(
             Colors::Red,
             Levels,
             Colors::Blue, 
             Colors::Purple
         ));
-        mPatterns.emplace_back(std::make_unique<LomlPattern<MultiFadePattern<levelSize, 2>>>(
-            Colors::Red,
+        mMessagePatterns.emplace_back(std::make_unique<HeartPattern<MultiFadePattern<levelSize, 2>>>(
+            Colors::Aqua,
             Levels,
             std::array {
                 Colors::Red,
-                Colors::LightYellow,
+                Colors::Red,
             },
             std::array {
                 Colors::Pink,
-                Colors::Orange
+                Colors::Purple
             }
         ));
-        mPatterns.emplace_back(std::make_unique<XOPattern<MultiFadePattern<levelSize, 2>>>(
-            Colors::Red,
+        mMessagePatterns.emplace_back(std::make_unique<LomlPattern<MultiFadePattern<levelSize, 2>>>(
+            Colors::Aqua,
             Levels,
             std::array {
                 Colors::Red,
-                Colors::LightYellow,
+                Colors::Red,
             },
             std::array {
                 Colors::Pink,
-                Colors::Orange
+                Colors::Purple
+            }
+        ));
+        mMessagePatterns.emplace_back(std::make_unique<XOPattern<MultiFadePattern<levelSize, 2>>>(
+            Colors::Aqua,
+            Levels,
+            std::array {
+                Colors::Red,
+                Colors::Red,
+            },
+            std::array {
+                Colors::Pink,
+                Colors::Purple
             }
         ));
     }
 
     void LEDController::OnMessage(const ButtonResult& args) {
-        if (args.Event == ButtonEvent::Short) {
-            ChangePattern();
+        switch (args.Event) {
+            case ButtonEvent::Cycle:
+                ChangePattern();
+                break;
+            case ButtonEvent::SelectMessage:
+                mMode = PatternMode::Sending;
+                mPatterns.at(mCurrentIndex)->Interrupt();
+                mPrevIndex = mCurrentIndex;
+                mCurrentIndex = 1;
+                break;
+            case ButtonEvent::SendMessage:
+                mConfirmPattern->SetLifetime(ConfirmHoldTime);
+
+                mMessagePatterns.at(mCurrentIndex)->Interrupt();
+            
+                if (mCurrentIndex != 0) {
+                    mMode = PatternMode::Confirming;
+                    Publish(LEDResult{.PatternIndex=static_cast<size_t>(mCurrentIndex)});
+                }
+                else {
+                    mMode = PatternMode::Default;
+                }
+                mCurrentIndex = mPrevIndex;
+                break;
         }
     }
     
     void LEDController::OnMessage(const WiFiResult& args) {
         Serial.println("Changing pattern");
-
-        static std::random_device rd{};
-        static std::mt19937 gen{rd()};
-        std::uniform_int_distribution<> dis{mReceiveIndex, static_cast<int32_t>(mPatterns.size()) - 1};
-		
-        auto newIndex = dis(gen);
-        while (newIndex == mCurrentIndex) {
-            newIndex = dis(gen);
+        
+        switch (mMode) {
+            case PatternMode::Default:
+                mPatterns.at(mCurrentIndex)->Interrupt();
+                break;
+            case PatternMode::Confirming:
+                mConfirmPattern->Interrupt();
+                break;
+            case PatternMode::Receiving:
+            case PatternMode::Sending:
+                mMessagePatterns.at(mCurrentIndex)->Interrupt();
+                break;
         }
-
+		mMode = PatternMode::Receiving;
+        
         mPatterns.at(mCurrentIndex)->Interrupt();
-        mCurrentIndex = newIndex;
+        mCurrentIndex = args.PatternIndex;
     }
     
     void LEDController::ChangePattern() {
-        mPatterns.at(mCurrentIndex)->Interrupt();
-        if (mCurrentIndex >= mReceiveIndex) {
-            mCurrentIndex = mPrevIndex;
+        switch (mMode) {
+            case PatternMode::Default:
+                mPatterns.at(mCurrentIndex)->Interrupt();
+                mCurrentIndex = (mCurrentIndex + 1) % mPatterns.size();
+                break;
+            case PatternMode::Receiving:
+                mMode = PatternMode::Default;
+                mMessagePatterns.at(mCurrentIndex)->Interrupt();
+                mCurrentIndex = mPrevIndex;
+                break;
+            case PatternMode::Sending:
+                mMessagePatterns.at(mCurrentIndex)->Interrupt();
+                mCurrentIndex = (mCurrentIndex + 1) % mMessagePatterns.size();
+                break;
+            case PatternMode::Confirming:
+                mConfirmPattern->Interrupt();
+                mCurrentIndex = mPrevIndex;
+                break;
         }
-        else {
-            mCurrentIndex = (mCurrentIndex + 1) % mReceiveIndex;
-        }
-        mPrevIndex = mCurrentIndex;
     }
 
     void LEDController::UpdateImpl() {
         mStrip.ClearTo(Colors::Black);
         
-        auto success = mPatterns.at(mCurrentIndex)->Display(mStrip);
+        const bool success = [&]() {
+            switch (mMode) {
+                case PatternMode::Default:
+                    return mPatterns.at(mCurrentIndex)->Display(mStrip);
+                case PatternMode::Confirming:
+                    return mConfirmPattern->Display(mStrip);
+                case PatternMode::Receiving:
+                case PatternMode::Sending:
+                    return mMessagePatterns.at(mCurrentIndex)->Display(mStrip);
+            }
+            return false;
+        }();
         if (!success) {
             ChangePattern();
+            if (mMode == PatternMode::Confirming) {
+                mMode = PatternMode::Default;
+            }
         }
     }
 }

@@ -16,14 +16,19 @@ void Loml::ButtonController::UpdateImpl() {
         return;
     }
 
-    auto start = millis();
+    const auto start = millis();
     while (digitalRead(mSettings.PinNumber) == LOW);
-    auto end = millis();
+    const auto end = millis();
 
     if (end - start < mSettings.LongPressDurationMs) {
-        Publish(ButtonResult{.Event = ButtonEvent::Short});
+        Publish(ButtonResult{.Event = ButtonEvent::Cycle});
+    }
+    else if (mMode == PatternMode::Sending) {
+        mMode = PatternMode::Default;
+        Publish(ButtonResult{.Event = ButtonEvent::SendMessage});
     }
     else {
-        Publish(ButtonResult{.Event = ButtonEvent::Long});
+        mMode = PatternMode::Sending;
+        Publish(ButtonResult{.Event = ButtonEvent::SelectMessage});
     }
 }

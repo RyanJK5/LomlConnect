@@ -21,7 +21,7 @@ namespace Loml {
 
     template <int ColorCount>
     void RadiatePattern<ColorCount>::DisplayImpl(LEDStrip& led) {
-        constexpr static auto colorBrightness = 30;
+        constexpr static auto colorBrightness = 10;
 
         const auto displayRing = [&](RgbColor color, int32_t index) {
             const auto startPos = RingStartPositions.at(index); 
@@ -52,7 +52,7 @@ namespace Loml {
         for (auto i = RingLengths.size(); i > 0; i--) {
             for (auto j = 0; j < colorBrightness; j++) {
                 DimRange(led, RingStartPositions.at(i - 1), RingLengths.at(i - 1));
-                if (!Delay(10)) {
+                if (!Delay(30)) {
                     return;
                 }
             }

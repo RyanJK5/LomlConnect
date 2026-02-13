@@ -39,9 +39,10 @@ namespace Loml {
 		mWifiClient.setInsecure();
 	
 		mPubSub.setServer(settings.Server.NetworkName, settings.Server.Port);
-		mPubSub.setCallback([&](char* topic, byte*, unsigned int length){
+		mPubSub.setCallback([&](char* topic, byte* data, unsigned int length){
 			Serial.println("Message received");
-			Publish({});
+			
+			Publish({.PatternIndex = static_cast<size_t>(std::atoi(reinterpret_cast<const char*>(data)))});
 		});
 	}
 	
@@ -69,12 +70,8 @@ namespace Loml {
 		mPubSub.loop();
 	}
 	
-	void WiFiController::OnMessage(const ButtonResult& args) {
-		if (args.Event == ButtonEvent::Short) {
-			return;
-		}
-
-		mPubSub.publish(mServerSettings.Username, "");
+	void WiFiController::OnMessage(const LEDResult& args) {
+		mPubSub.publish(mServerSettings.Username, std::to_string(args.PatternIndex).c_str());
 		Serial.println("Published message");
 	}
 }

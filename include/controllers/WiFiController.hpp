@@ -5,7 +5,7 @@
 #include <WiFiClientSecure.h>
 
 #include "controllers/Controller.hpp"
-#include "controllers/ButtonController.hpp"
+#include "controllers/LEDResult.hpp"
 #include "controllers/ControllerSubscriber.hpp"
 
 namespace Loml {
@@ -34,25 +34,28 @@ namespace Loml {
         ServerSettings Server = {};
     };
 
+    template <>
+    struct ControllerResult<WiFiController> {
+        size_t PatternIndex = 0;
+    };
+
     using WiFiSettings = ControllerSettings<WiFiController>;
     using WiFiResult   = ControllerResult<WiFiController>;
 
     class WiFiController 
         : public Controller<WiFiController>
-        , public ControllerSubscriber<ButtonController> {
+        , public ControllerSubscriber<LEDController> {
     public:
         friend Controller<WiFiController>;
         
         WiFiController(const WiFiSettings& settings);
 
-        virtual void OnMessage(const ButtonResult& result) override final;
+        virtual void OnMessage(const LEDResult& result) override final;
     private:
         void Reconnect();
 
         void UpdateImpl();
     private:
-        QueueHandle_t    mOutQueue;
-        
         ServerSettings   mServerSettings;
         WiFiClientSecure mWifiClient;
         PubSubClient     mPubSub;
