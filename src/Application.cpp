@@ -5,9 +5,9 @@
 
 namespace Loml {
     Application::Application(const LEDSettings& ledSetup, const ButtonSettings& buttonSetup, const WiFiSettings& wifiSetup) 
-        : mLED{ledSetup}
-        , mButton{buttonSetup}
-        , mWiFi{wifiSetup} {
+        : mLED(ledSetup)
+        , mButton(buttonSetup)
+        , mWiFi(wifiSetup) {
         mLED.AddSubscriber(mWiFi);
         mButton.AddSubscriber(mLED);
         mWiFi.AddSubscriber(mLED);

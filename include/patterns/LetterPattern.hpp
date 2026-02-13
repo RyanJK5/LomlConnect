@@ -58,7 +58,7 @@ namespace Loml {
 				return;
 			}
 			
-			auto args_tuple = std::forward_as_tuple(arrays...);
+			const auto args_tuple = std::forward_as_tuple(arrays...);
 			const auto& lastArray = std::get<sizeof...(Args) - 1>(args_tuple);
 
 			for (int32_t i = lastArray.size() - 1; i >= 0; i--) {
