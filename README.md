@@ -3,6 +3,8 @@ LomlConnect
 
 LomlConnect allows two LED boards to communicate with each other over a WiFi connection to send heartfelt messages. Users can choose from six patterns to dormantly display on their heart, and can send six different messages to users connected over the same MQTT server.
 
+The program was designed and tested using an [ESP32-DevKitM-1](https://docs.espressif.com/projects/esp-dev-kits/en/latest/esp32/esp32-devkitm-1/user_guide.html) microcontroller and [FIT0676](https://wiki.dfrobot.com/93_LEDs_WS2812B_RGB_6_Ring_Lamp_SKU_FIT0676) LED board.
+
 Usage
 --------------
 1) Ensure each heart is connected to the WiFi network specified when building (see below).
@@ -44,4 +46,4 @@ pio device monitor
 
 License
 -------
-This project is licensed under the terms of the MIT license.
+This project is licensed under the terms of the [MIT license](LICENSE).
