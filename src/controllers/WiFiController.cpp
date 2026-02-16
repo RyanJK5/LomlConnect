@@ -41,10 +41,11 @@ namespace Loml {
 		mWifiClient.setInsecure();
 	
 		mPubSub.setServer(settings.Server.NetworkName, settings.Server.Port);
-		mPubSub.setCallback([&](char* topic, byte* data, unsigned int){
+		mPubSub.setCallback([this](char* topic, byte* data, unsigned int length){
 			Serial.println("Message received");
 			
-			Publish({.PatternIndex = static_cast<size_t>(std::atoi(reinterpret_cast<const char*>(data)))});
+			const std::string str{reinterpret_cast<const char*>(data), length};
+			Publish({.PatternIndex = static_cast<size_t>(std::stoi(str))});
 		});
 	}
 	
