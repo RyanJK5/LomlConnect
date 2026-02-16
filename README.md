@@ -42,7 +42,7 @@ pio run -t upload
 pio device monitor
 ``` 
 
-**IMPORTANT:** The `NeoPixelBus` library was modified to make `RgbColor`'s two implicit constructors `constexpr`. Please make these changes to compile the code properly.
+**IMPORTANT:** The [NeoPixelBus](https://github.com/Makuna/NeoPixelBus) library was modified to make `RgbColor`'s two implicit constructors `constexpr`. Please make these changes to compile the code properly.
 
 License
 -------
