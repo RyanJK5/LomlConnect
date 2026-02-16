@@ -21,9 +21,9 @@ Usage
 
 Project Layout
 --------------
-- src/: Application entry points and runtime wiring.
-- include/controllers/ and src/controllers/: Controller interfaces and data models.
-- include/patterns/ and src/patterns/: LED pattern definitions and implementations.
+- [src/](src/): Application entry points and runtime wiring.
+- [include/controllers/](include/controllers/) and [src/controllers/](src/controllers/): Controller interfaces and data models.
+- [include/patterns/](include/patterns/) and [src/patterns/](src/patterns/): LED pattern definitions and implementations.
 
 Build and Upload
 ----------------
