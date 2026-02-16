@@ -13,14 +13,16 @@ namespace Loml {
                     static_cast<uint8_t>(0),
                     static_cast<uint8_t>(pos * 3)
                 };
-            } else if (pos < 170) {
+            } 
+            else if (pos < 170) {
                 pos -= 85;
                 return RgbColor{
                     static_cast<uint8_t>(0), 
                     static_cast<uint8_t>(pos * 3), 
                     static_cast<uint8_t>(max - pos * 3)
                 };
-            } else {
+            } 
+            else {
                 pos -= 170;
                 return RgbColor{
                     static_cast<uint8_t>(pos * 3), 
@@ -30,10 +32,10 @@ namespace Loml {
             }
         };
         
-        for (int j = 0; j < 256; j++) {   // cycle all 256 colors in the wheel
+        for (int j = 0; j < 256; j++) {   // Cycle all 256 colors in the wheel
             for (int q = 0; q < 3; q++) {
                 for (int i = 0; i < led.PixelCount(); i += 3) {
-                    led.SetPixelColor(i + q, colorWheel( (i + j) % 255).Dim(30)); //turn every third pixel on
+                    led.SetPixelColor(i + q, colorWheel( (i + j) % 255).Dim(30)); // Turn every third pixel on
                 }
                 led.Show();
 
@@ -42,7 +44,7 @@ namespace Loml {
                 }
 
                 for (int i = 0; i < led.PixelCount(); i = i + 3) {
-                    led.SetPixelColor(i + q, RgbColor{0});      //turn every third pixel off
+                    led.SetPixelColor(i + q, Colors::Black); // Turn every third pixel off
                 }
                 led.Show();
             }

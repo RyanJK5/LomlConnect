@@ -4,13 +4,14 @@
 #include "patterns/LEDPattern.hpp"
 
 namespace Loml {
+    // Pattern that displays nothing. Essentially "turning off" the display.
     class BlankPattern : public LEDPattern {
     public: 
         constexpr BlankPattern() = default;
     protected:
-        virtual void DisplayImpl(LEDStrip& led) override final {
+        void DisplayImpl(LEDStrip& led) override final {
             led.Show();
-            std::ignore = Delay(5);
+            [[maybe_unused]] auto success = Delay(5);
         }
     };
 }

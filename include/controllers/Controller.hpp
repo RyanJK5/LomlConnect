@@ -11,14 +11,14 @@ namespace Loml {
         BaseType_t  CoreID     = 0;
     };
 
-    template <typename Derived>
+    template <typename Derived> // CRTP
     class Controller : public Publisher<Derived> {
     public:
         void CreateTask(const TaskSettings& taskSettings);
     protected:
-        ~Controller() = default;
+        ~Controller() = default; // CRTP class - children should expose a public destructor
 
-        friend Derived;
+        friend Derived; // Children can instantiate base class
     private:
         Controller(const ControllerSettings<Derived>& controllerSettings);
     };
@@ -29,12 +29,12 @@ namespace Loml {
     template <typename Derived>
     void Controller<Derived>::CreateTask(const TaskSettings& taskSettings) {
         constexpr static auto updateTask = [](void* self){ 
-            while (true) {
+            while (true) { // Technically UB, but there is no real way to stop the program on ESP32
                 static_cast<Derived*>(self)->UpdateImpl(); 
             }
         };
         
-        xTaskCreatePinnedToCore(
+        xTaskCreatePinnedToCore( // ESP32-native way of creating thread
             updateTask, 
             taskSettings.Name, 
             taskSettings.StackDepth, 
@@ -45,4 +45,5 @@ namespace Loml {
         );
     }
 }
+
 #endif

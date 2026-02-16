@@ -7,18 +7,19 @@
 #include "controllers/Controller.hpp"
 
 namespace Loml {
+    // Represents the various states of the program
     enum struct PatternMode {
-        Default,
-        ConfirmingSent,
-        ConfirmingReceived,
-        Sending,
-        Receiving
+        Default, // Showing one of the typical patterns
+        ConfirmingSent, // Displaying confirmation for sending a pattern
+        ConfirmingReceived, // Displaying confirmation for receiving a pattern
+        Sending, // Selecting a pattern to send
+        Receiving // Displaying a received pattern
     };
 
     enum struct ButtonEvent {
-        Cycle,
-        SelectMessage,
-        SendMessage,
+        Cycle, // Proceed to next pattern
+        SelectMessage, // Open prompt to select a message
+        SendMessage // Confirm sending the selected message
     };
 
     class ButtonController;
@@ -39,7 +40,7 @@ namespace Loml {
 
     class ButtonController : public Controller<ButtonController> {
     public:
-        friend Controller<ButtonController>;
+        friend Controller<ButtonController>; // Exposes access to UpdateImpl
 
         ButtonController(const ButtonSettings& settings);
     private:

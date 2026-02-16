@@ -17,7 +17,7 @@ namespace Loml {
             , mBackground(true, std::forward<Args>(args)...)
         { }
     protected:
-        virtual void DisplayImpl(LEDStrip& led) override final;
+        void DisplayImpl(LEDStrip& led) override final;
     private:
         Background mBackground;
 

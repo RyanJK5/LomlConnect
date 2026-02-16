@@ -6,8 +6,8 @@
 
 namespace Loml {
 	WiFiController::WiFiController(const WiFiSettings& settings) 
-		: Controller{settings}
-		, mServerSettings{settings.Server}
+		: Controller(settings)
+		, mServerSettings(settings.Server)
 	{
 		Serial.println("Connecting...");
 		
@@ -19,7 +19,7 @@ namespace Loml {
 		        Serial.print(".");
 		    }
 			Serial.println();
-		    Serial.println("Connected successful!");
+		    Serial.println("Connection successful!");
 		}
 		else {
 		    if (WiFiEnterprise.begin(settings.Local.NetworkName, settings.Local.Username, settings.Local.Password)) {
@@ -36,10 +36,12 @@ namespace Loml {
 		}
 	
 		mPubSub.setClient(mWifiClient);
+		// This could be tightened to require a certification to connect to the server, but an insecure connection
+		// is fine for the scale of this program.
 		mWifiClient.setInsecure();
 	
 		mPubSub.setServer(settings.Server.NetworkName, settings.Server.Port);
-		mPubSub.setCallback([&](char* topic, byte* data, unsigned int length){
+		mPubSub.setCallback([&](char* topic, byte* data, unsigned int){
 			Serial.println("Message received");
 			
 			Publish({.PatternIndex = static_cast<size_t>(std::atoi(reinterpret_cast<const char*>(data)))});

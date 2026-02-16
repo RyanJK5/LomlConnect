@@ -9,24 +9,20 @@
 namespace Loml {
     using LEDStrip = NeoPixelBus<NeoGrbFeature, Neo800KbpsMethod>;
 
-    template <int ColorCount>
-    constexpr auto Dimmed(const std::array<RgbColor, ColorCount>& colors, uint8_t dim) {
-        std::array<RgbColor, ColorCount> ret{};
-        for (auto i = 0; i < colors.size(); i++) {
-            ret.at(i) = colors.at(i).Dim(dim);
-        }
-        return ret;
-    }
-
+    // Implementation of the strategy design pattern for displaying a pattern on the LED board.
     class LEDPattern {
     public:
         constexpr LEDPattern() = default;
         virtual ~LEDPattern() = default;
-
+        
+        // Interrupt the pattern's display animation in a thread-safe way.
         void Interrupt();
+        // Set the pattern to expire after lifetimeMs ticks. It is the user's responsibility to
+        // handle an expired pattern by checking the return value of Display().
         void SetLifetime(int64_t lifetimeMs);
 
-        auto Display(LEDStrip& led) -> bool;
+        // Returns false if the pattern has expired.
+        [[nodiscard]] auto Display(LEDStrip& led) -> bool;
     protected:
         virtual void DisplayImpl(LEDStrip& led) = 0;
     

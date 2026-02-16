@@ -4,6 +4,9 @@
 #include "patterns/LEDPattern.hpp"
 
 namespace Loml {
+    // A pattern that can be overlayed behind another pattern, primarily for use with LetterPatterns.
+    // BackgroundPatterns are expected to update more frequently than typical patterns. When constructed
+    // with inBackground = true, they should not delay or display their pattern.
     class BackgroundPattern : public LEDPattern {
     public:
         constexpr BackgroundPattern(bool inBackground);

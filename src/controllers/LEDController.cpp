@@ -150,7 +150,7 @@ namespace Loml {
                 mMode = PatternMode::Sending;
                 mPatterns.at(mCurrentIndex)->Interrupt();
                 mPrevIndex = mCurrentIndex;
-                mCurrentIndex = 1;
+                mCurrentIndex = 1; // Skip past the blank pattern
                 break;
             case ButtonEvent::SendMessage:
                 mConfirmPattern->SetLifetime(ConfirmHoldTime);
@@ -159,9 +159,9 @@ namespace Loml {
             
                 if (mCurrentIndex != 0) {
                     mMode = PatternMode::ConfirmingSent;
-                    Publish(LEDResult{.PatternIndex=static_cast<size_t>(mCurrentIndex)});
+                    Publish({.PatternIndex = mCurrentIndex});
                 }
-                else {
+                else { // Do not send blank pattern
                     mMode = PatternMode::Default;
                 }
                 mCurrentIndex = mPrevIndex;

@@ -15,7 +15,7 @@ namespace Loml {
             , mBackground(true, std::forward<Args>(args)...)
         { }
     protected:
-        virtual void DisplayImpl(LEDStrip& led) override final;
+        void DisplayImpl(LEDStrip& led) override final;
     private:
         Background mBackground;
     };
@@ -24,7 +24,7 @@ namespace Loml {
     void XOPattern<Background>::DisplayImpl(LEDStrip& led) {
         DisplayLetterPattern(led, mBackground,
             OrderedXPositions, OrderedOPositions,
-            OrderedXPositions, OrderedOPositions
+            OrderedXPositions, OrderedOPositions // Show XO twice so that we only show the letter collapsing on the second 'O'
         );
     }
 }

@@ -3,6 +3,8 @@
 
 #include <NeoPixelBus.h>
 
+// NOTE: A slight modification was made to the NeoPixelBus library. RgbColor's main constructor
+// was made constexpr, and so was its brightness constructor.
 namespace Loml::Colors {
     // Grayscale
     constexpr inline RgbColor Black{0, 0, 0};

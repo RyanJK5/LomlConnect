@@ -31,8 +31,8 @@ namespace Loml {
         
         LEDController(const LEDSettings& settings);
 
-        virtual void OnMessage(const ButtonResult& args) override final;
-        virtual void OnMessage(const WiFiResult& args) override final;
+        void OnMessage(const ButtonResult& args) override final;
+        void OnMessage(const WiFiResult& args) override final;
     private:
         void AddNormalPatterns();
         void AddSpecialPatterns();
@@ -43,13 +43,13 @@ namespace Loml {
     private:
         LEDStrip mStrip;
         
-        std::vector<std::unique_ptr<LEDPattern>> mPatterns;
-        std::vector<std::unique_ptr<LEDPattern>> mMessagePatterns;
-        std::unique_ptr<LEDPattern> mConfirmPattern;
+        std::vector<std::unique_ptr<LEDPattern>> mPatterns; // Patterns displayed during 'Default' mode
+        std::vector<std::unique_ptr<LEDPattern>> mMessagePatterns; // Patterns sent between heart devices
+        std::unique_ptr<LEDPattern> mConfirmPattern; // The confirmation pattern
         
         PatternMode mMode = PatternMode::Default;
 
-        size_t mPrevIndex = 0;
+        size_t mPrevIndex = 0; // For remembering the last pattern before a message was sent/received
         size_t mCurrentIndex = 0;
     };
 }

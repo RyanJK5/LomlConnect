@@ -50,7 +50,7 @@ namespace Loml {
         
         WiFiController(const WiFiSettings& settings);
 
-        virtual void OnMessage(const LEDResult& result) override final;
+        void OnMessage(const LEDResult& result) override final;
     private:
         void Reconnect();
 

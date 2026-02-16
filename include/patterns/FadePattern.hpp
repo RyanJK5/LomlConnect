@@ -6,17 +6,18 @@
 #include <utility>
 
 namespace Loml {
-    template <int LevelCount>
+    // Fades between two provided colors across the various levels provided in the constructor.
+    template <int LevelCount> // Number of levels
     class FadePattern : public BackgroundPattern {
     public:
-        using Array = std::array<std::vector<int32_t>, LevelCount>;
+        using Array = std::array<std::vector<int32_t>, LevelCount>; // To avoid verbosity
 
         constexpr FadePattern(bool inBackground, const Array& levels, RgbColor left, RgbColor right);
     
-        void SetColors(RgbColor left, RgbColor right);
-        [[nodiscard]] auto GetColors() const -> std::pair<RgbColor, RgbColor>;
+        constexpr void SetColors(RgbColor left, RgbColor right);
+        [[nodiscard]] constexpr auto GetColors() const -> std::pair<RgbColor, RgbColor>;
     protected:
-        virtual void DisplayImpl(LEDStrip& led) override final;
+        void DisplayImpl(LEDStrip& led) override final;
     private:
         Array mLevels;
 
@@ -37,7 +38,7 @@ namespace Loml {
     template <int LevelCount>
     void FadePattern<LevelCount>::DisplayImpl(LEDStrip& led) {
         for (const auto& level : mLevels) {
-            for (auto pos : level) {
+            for (const auto pos : level) {
                 led.SetPixelColor(pos, 
                     RgbColor::LinearBlend(
                         mLeft, mRight, (mColorCounter % mLevels.size()) / static_cast<float>(mLevels.size())
@@ -50,18 +51,18 @@ namespace Loml {
         
         if (!InBackground()) {
             led.Show();
-            std::ignore = Delay(20);
+            [[maybe_unused]] auto success = Delay(20);
         }
     }
 
     template <int LevelCount>
-    void FadePattern<LevelCount>::SetColors(RgbColor left, RgbColor right) {
+    constexpr void FadePattern<LevelCount>::SetColors(RgbColor left, RgbColor right) {
         mLeft = left;
         mRight = right;
     }
 
     template <int LevelCount>
-    auto FadePattern<LevelCount>::GetColors() const -> std::pair<RgbColor, RgbColor> {
+    constexpr auto FadePattern<LevelCount>::GetColors() const -> std::pair<RgbColor, RgbColor> {
         return std::make_pair(mLeft, mRight);
     }
 }

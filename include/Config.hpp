@@ -18,6 +18,8 @@ namespace Loml::Config {
 
     constexpr inline LocalSettings DefaultLocalSettings {
         .NetworkName = LOML_LOCAL_NETWORK_NAME,
+        // This field is for logging into an enterprise WiFi service, such as wpa2. 
+        // Provide nullptr if connecting to a typical WiFi service.
         .Username    = LOML_LOCAL_USERNAME,
         .Password    = LOML_LOCAL_PASSWORD
     };

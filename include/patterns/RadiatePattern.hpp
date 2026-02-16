@@ -4,12 +4,13 @@
 #include "patterns/LEDPattern.hpp"
 
 namespace Loml {
+    // Shows a ring that expands in size until the whole ring is filled, and then empties from the inside.
     template <int ColorCount>
     class RadiatePattern : public LEDPattern {
     public:
         constexpr RadiatePattern(const std::array<RgbColor, ColorCount>& colors);
     protected:
-        virtual void DisplayImpl(LEDStrip& led) override final;
+        void DisplayImpl(LEDStrip& led) override final;
     private:
         std::array<RgbColor, ColorCount> mColors;
     };

@@ -7,16 +7,17 @@
 #include <array>
 
 namespace Loml {
-    template <int ColorCount>
+	// A pattern that pulses between multiple different colors.
+    template <int ColorCount> // The number of different colors to pulse between
     class BeatPattern : public LEDPattern {
     public:
         constexpr BeatPattern(
 			const std::array<RgbColor, ColorCount>& colors, 
-			int64_t delayTimeMs = 30, 
-			int64_t holdTimeMs = 500
+			int64_t delayTimeMs = 30, // The delay between each step in increasing the color's brightness
+			int64_t holdTimeMs = 500 // How long a color should be held at max brightness
 		);
     protected:
-        virtual void DisplayImpl(LEDStrip& led) override final;    
+        void DisplayImpl(LEDStrip& led) override final;    
     private:
         std::array<RgbColor, ColorCount> mColors;
         size_t mColorIndex = 0;
@@ -27,9 +28,9 @@ namespace Loml {
 
     template <int ColorCount>
     constexpr BeatPattern<ColorCount>::BeatPattern(
-		const std::array<RgbColor, ColorCount>& colors,
-		int64_t delayTimeMs, 
-		int64_t holdTimeMs)
+			const std::array<RgbColor, ColorCount>& colors,
+			int64_t delayTimeMs, 
+			int64_t holdTimeMs)
         : mColors(colors)
 		, mDelayTimeMs(delayTimeMs)
 		, mHoldTimeMs(holdTimeMs)
@@ -51,9 +52,11 @@ namespace Loml {
 				}
 			}
 		}
+
 		if (!Delay(mHoldTimeMs)) {
 			return;
 		}
+		
 		for (auto i = 0; i <= maxBrightness; i++) {
 			for (auto j = 0; j < RingLengths.size(); j++) {
 				for (auto k = 0; k < RingLengths.at(j); k++) {
@@ -65,6 +68,7 @@ namespace Loml {
 				}
 			}
 		}
+		
 		if (!Delay(mHoldTimeMs)) {
 			return;
 		}

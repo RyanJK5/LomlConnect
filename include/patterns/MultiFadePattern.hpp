@@ -5,6 +5,9 @@
 #include "patterns/FadePattern.hpp"
 
 namespace Loml {
+    // A background pattern that crossfades between two colors over various levels. It then also
+    // crossfades the colors on each end between various colors. Basically, pass in a bunch of
+    // colors and observe the effect 
     template <int LevelCount, int ColorCount>
     class MultiFadePattern : public BackgroundPattern {
     public:
@@ -14,7 +17,7 @@ namespace Loml {
             const std::array<RgbColor, ColorCount>& rightColors
         );
     protected:
-        virtual void DisplayImpl(LEDStrip& led) override final;
+        void DisplayImpl(LEDStrip& led) override final;
     private:
         std::array<RgbColor, ColorCount> mLeftColors;
         std::array<RgbColor, ColorCount> mRightColors;
@@ -39,6 +42,9 @@ namespace Loml {
 
     template <int LevelCount, int ColorCount>
     void MultiFadePattern<LevelCount, ColorCount>::DisplayImpl(LEDStrip& led) {
+        // MultiFade is just a wrapper around FadePattern. We simply vary the colors
+        // that FadePattern uses every tick, and then call its display method.
+        
         size_t nextIndex = (mFadeIndex + 1) % mLeftColors.size();
         mFade.SetColors(
             RgbColor::LinearBlend(mLeftColors[mFadeIndex], mLeftColors[nextIndex], mBlendAmount),
@@ -51,7 +57,7 @@ namespace Loml {
             mFadeIndex = nextIndex;
         }
         mBlendAmount += delta;
-        mFade.Display(led);
+        [[maybe_unused]] const auto expired = mFade.Display(led); // We know that mFade has no lifetime
     }
 }
 

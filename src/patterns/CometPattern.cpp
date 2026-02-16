@@ -10,7 +10,8 @@ namespace Loml {
             for (auto k = 0; k <= i; k++) {
                 for (auto j = 0; j < RingLengths.size(); j++) {
                     const auto offset = static_cast<float>(RingLengths[j]) / maxLength * k;
-                    led.SetPixelColor(RingStartPositions[j] + offset, mRingColors.at((j + colorIndex) % mRingColors.size()).Dim(20));
+                    led.SetPixelColor(RingStartPositions[j] + offset, 
+                        mRingColors.at((j + colorIndex) % mRingColors.size()).Dim(20));
                 }
             }
             led.Show();
