@@ -15,7 +15,7 @@ namespace Loml {
     
     void Application::Begin() {
         mButton.CreateTask(TaskSettings{.Name = "ButtonTask", .StackDepth = 4096,  .CoreID = 1});
-        mButton.CreateTask(TaskSettings{.Name = "WiFiTask",   .StackDepth = 12228, .CoreID = 0});
-        mButton.CreateTask(TaskSettings{.Name = "LEDTask",    .StackDepth = 4096,  .CoreID = 0});
+        mWiFi.CreateTask(TaskSettings{.Name = "WiFiTask",   .StackDepth = 12228, .CoreID = 0});
+        mLED.CreateTask(TaskSettings{.Name = "LEDTask",    .StackDepth = 4096,  .CoreID = 0});
     }
 }
